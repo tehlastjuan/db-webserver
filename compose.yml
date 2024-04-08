@@ -1,0 +1,51 @@
+version: "3.9"
+services:
+  webserver:
+    container_name: webserver
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./www:/var/www/html
+    hostname: local
+    ports:
+      - 8000:80
+    depends_on:
+      - mariadb
+
+  mariadb:
+    container_name: maria-db
+    image: mariadb
+    restart: always
+    command: --max_allowed_packet=256M
+    environment:
+      MYSQL_DATABASE: db_test
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: admin
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - ./mysql_data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+
+  phpmyadmin:
+    container_name: phpmyadmin
+    image: phpmyadmin/phpmyadmin
+    restart: always
+    links:
+      - mariadb
+    volumes:
+      - /sessions
+      - ~/docker/phpmyadmin/config.user.inc.php:/etc/phpmyadmin/config.user.inc.php
+      - ./phpmyadmin:/data
+    ports:
+      - 8081:80
+    environment:
+      # log in as root to create and manage new databases
+      PMA_ARBITRARY: 1
+      PMA_HOST: mariadb
+
+      # this gives acces to only db_test
+      # PMA_USER: admin
+      # PMA_PASSWORD: admin
+      # MYSQL_ROOT_PASSWORD: admin
