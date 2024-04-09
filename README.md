@@ -1,41 +1,39 @@
-## Webserver + mariaDB + phpmyadmin SQL in a docker container
-### Install
+# The Docker Container Series:
+### apache webserver + mariaDB + phpmyadmin -> SQL in a bottle
+#### Install
 ```
-// (UBUNTU) install Docker + Docker Compose
-$ sudo apt-get update & sudo apt-get upgrade
+// install Docker + Docker Compose
 $ sudo apt docker docker-compose
+$ sudo pacman -S docker docker-compose
 
 // enable docker daemon in systemd
 $ systemctl enable docker.service
 
-// add user to docker user group
+// add user to docker user group and log out
 $ sudo usermod -aG docker $USER
 
-// copy contents in a folder outside the repo & log out
-
-// build docker container and volumes
-$ cd <folder-name>
+// build docker containers and volumes
 $ docker compose up
 ```
-### Run
+#### Run
 ```
 // run in the background
 $ docker compose up -d
 
-// stop background docker process
+// stop docker background process
 docker compose down
 
+// web access
 Browser -> http://localhost:8000 -> html front end
 Browser -> http://localhost:8081 -> phpmyadmin front end
 ```
 
-### Command line
-##### Wwrite SQL queries in the command line
+#### Command line
 ```
-# shell in mariadb docker container
+# access the shell in mariadb docker container
 $ docker-compose exec mariadb bash
 
-# start mariadb process
+# run mariadb
 $ mariadb --user=username --password=userpasswd
 
 # print available databases
@@ -46,10 +44,12 @@ MariaDB[(none)]> use databasename;
 
 # show DB tables (relations)
 MariaDB[(databasename)]> show tables;
+
+# Start writing SQL queries in the confort of the command line!
 ```
 
 [guide](https://thriveread.com/apache-php-with-docker-mysql-and-phpmyadmin/) - 
-[docs](https://docs.docker.com/compose/) - 
+[docker compose docs](https://docs.docker.com/compose/) - 
 [archwiki docker page](https://wiki.archlinux.org/title/Docker) (good info)
 
 [SQL Cheat sheet 1](https://learnsql.com/blog/sql-basics-cheat-sheet/sql-basics-cheat-sheet-a4-page-1.png) - 
